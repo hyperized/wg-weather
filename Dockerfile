@@ -5,7 +5,7 @@ COPY ./ .
 
 RUN go mod tidy
 RUN go test
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o weather .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -buildvcs=false -o weather .
 
 FROM scratch
 

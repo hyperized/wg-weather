@@ -1,19 +1,14 @@
 ---
 name: Deploy to Fly
-on: [push]
+on: [ push ]
 jobs:
   deploy:
     name: Deploy wg-weather
     runs-on: ubuntu-latest
-    env:
-      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     steps:
       # This step checks out a copy of your repository.
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: fly launch --verbose --auto-confirm --region fra --remote-only --name weather
-      - run: fly deploy --verbose --remote-only --app weather
-      - run: fly apps create --machines --name weather
-      - run: fly ips allocate-v4 --verbose --yes --shared --region fra --app weather
-      - run: fly ips allocate-v6 --verbose --yes --region fra --app weather
-      - run: fly machine run . -p 80:80/tcp:http --region fra --app weather
+      - run: flyctl deploy --app hyperized-weather --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

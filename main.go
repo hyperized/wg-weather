@@ -20,7 +20,7 @@ type Request struct {
 
 var (
 	timeout = time.Second * 10
-	port    = ":80"
+	port    = ":8080"
 	town    = "Voorhout"
 	baseUrl = "https://weather-api.wundergraph.com/"
 	query   = `query WeatherInTown {
@@ -79,7 +79,7 @@ func main() {
 
 	go func() {
 		log.Printf("Serving weather reports for %s on %s...", town, port)
-		log.Fatal(srv.ListenAndServe())
+		log.Print(srv.ListenAndServe())
 	}()
 
 	go func() {

@@ -1,4 +1,4 @@
-# fly.toml file generated for hyperized-weather on 2023-03-11T02:17:42+01:00
+# fly.toml file generated for hyperized-weather on 2023-03-11T02:40:49+01:00
 
 app = "hyperized-weather"
 kill_signal = "SIGINT"
@@ -13,14 +13,14 @@ processes = []
 
 [[services]]
   http_checks = []
-  internal_port = 80
+  internal_port = 8080
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
-    type = "connections"
+    type = "requests"
 
   [[services.ports]]
     force_https = true
@@ -30,3 +30,9 @@ processes = []
   [[services.ports]]
     handlers = ["tls", "http"]
     port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"

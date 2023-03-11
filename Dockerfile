@@ -1,3 +1,7 @@
+FROM alpine as certsbuidlder
+
+RUN apk add -U --no-cache ca-certificates
+
 FROM golang:latest as builder
 
 WORKDIR /app/
@@ -15,7 +19,8 @@ LABEL author="Gerben Geijteman"
 WORKDIR /app/
 
 COPY --from=builder /app/weather /app/weather
+COPY --from=certsbuidlder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-EXPOSE 80/tcp
+EXPOSE 8080/tcp
 ENTRYPOINT ["/app/weather"]
 CMD []

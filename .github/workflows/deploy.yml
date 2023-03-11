@@ -1,14 +1,20 @@
 ---
-name: Deploy to Fly
+name: Redeploy on push
 on: [ push ]
 jobs:
   deploy:
-    name: Deploy wg-weather
+    name: redeploy hyperized-weather
     runs-on: ubuntu-latest
+    environment:
+      name: flydev
+      url: https://hyperized-weather.fly.dev/
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     steps:
       # This step checks out a copy of your repository.
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - run: flyctl apps create --machines --name hyperized-weather
+      - run: flyctl ips allocate-v4 --shared --app hyperized-weather --yes
+      - run: fly ips allocate-v6 --app hyperized-weather
+      - run: fly machine run . -p 443:8080/tcp:tls:http -p 80:8080/tcp:http --region ams --app hyperized-weather

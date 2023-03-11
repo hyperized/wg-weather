@@ -14,6 +14,7 @@ jobs:
       # This step checks out a copy of your repository.
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl destroy hyperized-weather --yes
       - run: flyctl apps create --machines --name hyperized-weather
       - run: flyctl ips allocate-v4 --shared --app hyperized-weather --yes
       - run: fly ips allocate-v6 --app hyperized-weather
